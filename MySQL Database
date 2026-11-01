@@ -1,0 +1,31 @@
+CREATE DATABASE IF NOT EXISTS campus_helpdesk;
+USE campus_helpdesk;
+
+CREATE TABLE IF NOT EXISTS students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    department VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS admin (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS complaints (
+    complaint_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    priority VARCHAR(20) DEFAULT 'Medium',
+    status VARCHAR(30) DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+);
+
+CREATE USER 'helpdesk'@'localhost' IDENTIFIED BY 'Helpdesk123';
+GRANT ALL PRIVILEGES ON campus_helpdesk.* TO 'helpdesk'@'localhost';
+FLUSH PRIVILEGES;
