@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Admin Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container mt-4">
+  <div th:replace="~{fragments :: alerts}"></div>
+  <h3 class="mb-3">Admin Dashboard</h3>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3"><div class="card stat-card text-center"><div class="card-body">
+      <div class="stat-number" th:text="${stats.total()}">0</div>Total</div></div></div>
+    <div class="col-6 col-md-3"><div class="card stat-card text-center border-warning"><div class="card-body">
+      <div class="stat-number" th:text="${stats.pending()}">0</div>Pending</div></div></div>
+    <div class="col-6 col-md-3"><div class="card stat-card text-center border-info"><div class="card-body">
+      <div class="stat-number" th:text="${stats.inProgress()}">0</div>In Progress</div></div></div>
+    <div class="col-6 col-md-3"><div class="card stat-card text-center border-success"><div class="card-body">
+      <div class="stat-number" th:text="${stats.resolved()}">0</div>Resolved</div></div></div>
+  </div>
+
+  <div class="card mb-4"><div class="card-body">
+    <h5>Category-wise Complaints</h5>
+    <table class="table table-sm w-auto mb-0">
+      <thead><tr><th>Category</th><th>Count</th></tr></thead>
+      <tbody>
+        <tr th:each="row : ${byCategory}">
+          <td th:text="${row.category()}">Category</td>
+          <td th:text="${row.count()}">0</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(byCategory)}"><td colspan="2">No data yet</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <h5>All Complaints</h5>
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr><th>ID</th><th>Student</th><th>Category</th><th>Description</th><th>Date</th><th>Update</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="c : ${complaints}">
+          <td th:text="${c.displayId()}">CMP-0001</td>
+          <td>
+            <span th:text="${c.studentName()}">Name</span><br>
+            <small class="text-muted" th:text="${c.department()}">Dept</small>
+          </td>
+          <td th:text="${c.category()}">Category</td>
+          <td style="max-width:300px" th:text="${c.description()}">Description</td>
+          <td th:text="${#temporals.format(c.createdAt(), 'dd MMM yyyy')}">Date</td>
+          <td>
+            <form method="post" class="d-flex gap-1"
+                  th:action="@{/admin/update/{id}(id=${c.complaintId()})}">
+              <select name="priority" class="form-select form-select-sm">
+                <option th:each="p : ${priorities}" th:value="${p}" th:text="${p}"
+                        th:selected="${p == c.priority()}"></option>
+              </select>
+              <select name="status" class="form-select form-select-sm">
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                        th:selected="${s == c.status()}"></option>
+              </select>
+              <button class="btn btn-sm btn-primary">Save</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

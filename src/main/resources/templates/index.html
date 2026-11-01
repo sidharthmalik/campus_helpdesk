@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Home')}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container mt-4">
+  <div th:replace="~{fragments :: alerts}"></div>
+  <div class="text-center py-5">
+    <h1 class="display-5 fw-bold">Campus Complaint &amp; Helpdesk</h1>
+    <p class="lead">Report issues with classrooms, labs, hostels and more, and track them until they're resolved.</p>
+    <a th:href="@{/register}" class="btn btn-primary btn-lg me-2">Get Started</a>
+    <a th:href="@{/login}" class="btn btn-outline-primary btn-lg">Login</a>
+  </div>
+</div>
+</body>
+</html>
